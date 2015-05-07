@@ -9,7 +9,7 @@ class Request < ActiveRecord::Base
   private
 
   def cannot_add_self
-    errors.add(:user_id, 'You cannot add yourself as a friend.') if user_id == receiver_id
+    errors.add(:user_id, 'You cannot request yourself as a friend.') if user_id == receiver_id
   end
 
   def cannot_add_when_already_added

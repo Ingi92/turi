@@ -20,11 +20,15 @@ class FriendshipsController < ApplicationController
   end
 
   def destroy
-    exist = Friendship.friendship_exists(params[:user_id], params[:friend_id])
-    @friendship = Friendship.where(friend_id: [current_user, params[:id]]).where(user_id: [current_user, params[:id]]).last
-    @friendship = Friendship.where
-    @friendship.destroy
-    flash[:notice] = I18n.t 'user_friendship_removed'
+    @friendship = current_user.friendships.find_by_id(params[:id])
+    if @friendship.nil?
+      flash[:alert] = I18n.t('user_friendship_not_removed')
+
+    elsif @friendship.destroy
+      flash[:notice] = I18n.t 'user_friendship_removed'
+    else
+      flash[:alert] = I18n.t('user_friendship_not_removed')
+    end
     redirect_to current_user
   end
 
