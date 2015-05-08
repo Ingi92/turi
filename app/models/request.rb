@@ -4,7 +4,7 @@ class Request < ActiveRecord::Base
 
   validates :user_id, :receiver_id, presence: true
   belongs_to :user
-  belongs_to :reciever, :class_name => User
+  belongs_to :receiver, :class_name => User
 
   private
 

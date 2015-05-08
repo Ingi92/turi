@@ -6,10 +6,14 @@ class FriendshipsController < ApplicationController
     pp "params are: #{params}"
 
     exist = Friendship.request_exists(params[:user_id], params[:friend_id])
+
     if exist
       @friendship = current_user.friendships.build(friend_id: params[:friend_id])
       if @friendship.save
         flash[:notice] = I18n.t 'user_friendship_confirmed'
+        #byebug
+        friendRequest = current_user.inverse_requests.where("receiver_id = ?", @user.id)
+        friendRequest[0].destroy
       else
         flash[:alert] = t('user_friendship_not_confirmed')
       end
@@ -20,7 +24,11 @@ class FriendshipsController < ApplicationController
   end
 
   def destroy
+    #byebug
     @friendship = current_user.friendships.find_by_id(params[:id])
+    if @friendship.nil?
+      @friendship = current_user.inverse_friendships.find_by_id(params[:id])
+    end
     if @friendship.nil?
       flash[:alert] = I18n.t('user_friendship_not_removed')
 
