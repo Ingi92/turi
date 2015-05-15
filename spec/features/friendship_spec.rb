@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Friendship feature' do
+RSpec.feature 'Friendship' do
   before do
     @userOne = FactoryGirl.create(:user)
     @userTwo = FactoryGirl.create(:user)
@@ -71,6 +71,12 @@ RSpec.feature 'Friendship feature' do
   end
 
   context 'without request made' do
+    scenario 'there is no button to accept a friendship' do
+      visit user_path @userOne
 
+      within("#friend-requests") do
+        expect(page).to_not have_content "accept_friend_request_#{userTwo.id}"
+      end
+    end
   end
 end
